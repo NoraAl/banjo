@@ -943,6 +943,14 @@ Builder::make_class_definition(Stmt_list&& s)
   return make<Class_def>(std::move(s));
 }
 
+// Make an extension declaration with an empty definition.
+Extension_decl&
+Builder::make_extension_declaration(Name& n, Type& t)
+{
+  Def& d = make_empty_definition();
+  return make<Extension_decl>(n, t, d);
+}
+
 
 Coroutine_decl&
 Builder::make_coroutine_declaration(Name&n, Decl_list&p, Type& t, Stmt& s)

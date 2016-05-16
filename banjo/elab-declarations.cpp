@@ -82,6 +82,7 @@ Elaborate_declarations::declaration(Decl& d)
     void operator()(Function_decl& d)  { elab.function_declaration(d); }
     void operator()(Coroutine_decl& d) { elab.coroutine_declaration(d); }
     void operator()(Class_decl& d)     { elab.class_declaration(d); }
+    void operator()(Extension_decl& d) {    /* Do nothing */        }
   };
   apply(d, fn{*this});
 }
@@ -168,6 +169,9 @@ Elaborate_declarations::class_declaration(Class_decl& d)
 
   // Update the class kind/metatype
   d.kind_ = &type(d.kind());
+
+  // search for declarations of the appropriate extensions in the current scope
+  // current scope: nameMap: append decls definitions along with this one
 
   Enter_scope scope(cxt, d);
   apply(d.definition(), fn{*this});

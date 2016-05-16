@@ -7,6 +7,7 @@ define_node(Variable_decl);
 define_node(Constant_decl);
 define_node(Function_decl);
 define_node(Class_decl);
+define_node(Extension_decl);
 define_node(Field_decl);
 define_node(Super_decl);
 define_node(Method_decl);

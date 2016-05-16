@@ -83,6 +83,7 @@ enum Token_kind
   enum_tok,
   explicit_tok,
   export_tok,
+  extension_tok,
   false_tok,
   float_tok,
   for_tok,

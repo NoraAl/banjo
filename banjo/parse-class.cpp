@@ -14,8 +14,9 @@ namespace banjo
 // Parse a class definition.
 //
 //    class-declaration:
-//      'class' identifier [':'] class-body
-//      'class' identifier [':' type] class-body
+//      'class' identifier [':']            class-body
+//      'class' identifier [':' type]       class-body
+//      'class' identifier [':' extension]  class-body
 //
 // NOTE: The parser currently allows the omission of the ':' because it
 // looks weird when the kind is not given explicitly omitted.
@@ -32,6 +33,8 @@ Parser::class_declaration()
   // Match the metatype.
   Type* kind;
   if (match_if(colon_tok)) {
+    if (match_if(extension_tok))
+      return extension_declaration(name, *kind);
     if (next_token_is(lbrace_tok))
       kind = &cxt.get_type_type();
     else
@@ -50,6 +53,22 @@ Parser::class_declaration()
   return finish_class_definition(decl, def);
 };
 
+
+// Parse an extension definition.
+//      'class' identifier [':' extension]  class-body
+
+Decl&
+Parser::extension_declaration(Name& name, Type& kind)
+{
+  // Point of declaration.
+  Decl& decl = start_extension_declaration(name, kind);
+  Enter_scope scope(cxt, cxt.saved_scope(decl));
+
+  // Match the class body.
+  Def& def = class_body();
+
+  return finish_extension_definition(decl, def);
+};
 
 // Parse a class body, which represents the body of a class.
 //

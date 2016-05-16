@@ -270,6 +270,23 @@ struct Class_decl : Type_decl
   Def*   def_;
 };
 
+// Represents the declaration of an extension type.
+struct Extension_decl : Type_decl
+{
+  Extension_decl(Name& n, Type& t, Def& d)
+          : Type_decl(n, t), def_(&d)
+  { }
+
+  void accept(Visitor& v) const { v.visit(*this); }
+  void accept(Mutator& v)       { v.visit(*this); }
+
+  Def const& definition() const { return *def_; }
+  Def&       definition()       { return *def_; }
+
+  Type*  kind_;
+  Def*   def_;
+};
+
 struct Coroutine_decl :Type_decl
 {
   Coroutine_decl(Name& n, Type& t, Decl_list const& p, Def& d)

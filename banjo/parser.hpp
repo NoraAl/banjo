@@ -150,8 +150,9 @@ struct Parser
   Type& unparsed_return_type();
   Expr& unparsed_expression_body();
 
-  // Classes
+  // Classes and extensions
   Decl& class_declaration();
+  Decl& extension_declaration(Name&, Type&);
   Def& class_body();
   Stmt_list member_statement_seq();
   Stmt& member_statement();
@@ -290,9 +291,11 @@ struct Parser
   Decl& finish_function_declaration(Decl&, Expr&);
   Decl& finish_function_declaration(Decl&, Stmt&);
 
-  // Classes
+  // Classes and extensions
   Decl& start_class_declaration(Name&, Type&);
   Decl& finish_class_definition(Decl&, Def&);
+  Decl& start_extension_declaration(Name&, Type&);
+  Decl& finish_extension_definition(Decl&, Def&);
   Def& on_class_body(Stmt_list&&);
 
   // Coroutine declarations

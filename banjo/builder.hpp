@@ -161,8 +161,9 @@ struct Builder
   Function_def&   make_function_definition(Stmt&);
   Expression_def& make_function_definition(Expr&);
 
-  // Classes
+  // Classes and extenasions
   Class_decl&  make_class_declaration(Name&, Type&);
+  Extension_decl&  make_extension_declaration(Name&, Type&);
   Class_def&   make_class_definition(Stmt_list&&);
   Field_decl&  make_field_declaration(Name&, Type&);
   Field_decl&  make_field_declaration(Name&, Type&, Expr&);

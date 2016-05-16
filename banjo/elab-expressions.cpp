@@ -136,6 +136,7 @@ Elaborate_expressions::declaration(Decl& d)
     void operator()(Super_decl& d)    { /* Do nothing. */ }
     void operator()(Function_decl& d) { elab.function_declaration(d); }
     void operator()(Class_decl& d)    { elab.class_declaration(d); }
+    void operator()(Extension_decl& d){ /* Do nothing. */ }//should be removed by now?
   };
   apply(d, fn{*this});
 }

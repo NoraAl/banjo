@@ -31,6 +31,23 @@ Parser::finish_class_definition(Decl& decl, Def& def)
   return cls;
 }
 
+// Build and declare the extension.
+Decl&
+Parser::start_extension_declaration(Name& n, Type& t)
+{
+  Decl& d = cxt.make_extension_declaration(n, t);
+  declare(cxt, current_scope(), d);
+  return d;
+}
+
+
+Decl&
+Parser::finish_extension_definition(Decl& decl, Def& def)
+{
+  Extension_decl& cls = cast<Extension_decl>(decl);
+  cls.def_ = &def;
+  return cls;
+}
 
 // Build a class definition from the statement sequence.
 Def&

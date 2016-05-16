@@ -1279,6 +1279,7 @@ Printer::declaration(Decl const& d)
     void operator()(Super_decl const& d)       { p.super_declaration(d); }
     void operator()(Function_decl const& d)    { p.function_declaration(d); }
     void operator()(Class_decl const& d)       { p.class_declaration(d); }
+    void operator()(Extension_decl const& d)       {/**/ }
     void operator()(Coroutine_decl const& d)   { p.coroutine_delcaration(d); }
 
     // Support emitting these here so we can print parameters without

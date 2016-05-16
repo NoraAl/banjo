@@ -121,6 +121,7 @@ init_tokens(Symbol_table& syms)
   init_token(syms, enum_tok, "enum");
   init_token(syms, explicit_tok, "explicit");
   init_token(syms, export_tok, "export");
+  init_token(syms, extension_tok, "extension");
   init_token(syms, false_tok, "false");
   init_token(syms, float_tok, "float");
   init_token(syms, for_tok, "for");
