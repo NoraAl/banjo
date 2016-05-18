@@ -101,7 +101,9 @@ Elaborate_overloads::declaration(Decl& decl)
   auto iter = std::find_if(ovl.begin(), ovl.end(), [&decl](Decl& d) {
     return &decl == &d;
   });
-  lingo_assert(iter != ovl.end());
+//  if(is<Class_decl>(decl)||is<Extension_decl>(decl))
+//    return;
+  lingo_assert(iter != ovl.end());//show extension message
   check_declarations(cxt, decl, ++iter, ovl.end());
 
   // Otherwise, potentially recurse.
@@ -109,7 +111,7 @@ Elaborate_overloads::declaration(Decl& decl)
   {
     Self& elab;
     void operator()(Decl& d)          { /* Do nothing. */ }
-    void operator()(Extension_decl& d)          { lingo_unhandled(d); }
+    void operator()(Extension_decl& d){ lingo_unhandled(d); }
     void operator()(Function_decl& d) { elab.function_declaration(d); }
     void operator()(Class_decl& d)    { elab.class_declaration(d); }
   };

@@ -122,6 +122,7 @@ check_declarations(Context& cxt, Object_decl const& d1, Object_decl const& d2)
     char const* operator()(Field_decl const& d)    { return "member variable"; }
     char const* operator()(Object_parm const& d)   { return "parameter"; }
   };
+
   error(cxt, "redeclaration of {} with the same name", apply(d1, fn{}));
   throw Declaration_error();
 }

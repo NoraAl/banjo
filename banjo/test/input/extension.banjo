@@ -1,0 +1,29 @@
+class T1: extension {
+  var a : int;
+  var b : int;
+  static var c : int;
+  var d : int;
+}
+
+class T1: extension {
+
+    var e : int;
+    var f : int;
+    var g : int;
+}
+
+class T1: extension {
+    var h : int;
+    var i:int;
+}
+
+class T1 {
+    var j : int;
+    var k : int;
+}
+
+var t : T1;
+
+var v1 : int = t.a;
+var v2 : int = t.j;
+

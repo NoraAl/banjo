@@ -2,29 +2,15 @@
 class T1 {
   var x : int;
   static var y : int;
+  var x : int;
 }
 
-
-
-class T1: extension {
-var l : int;
-  static var m : int;
-  var e:int;
-}
+var t : T1;
 
 // FIXME: This tries to assign an unparsed type to t.
 // We should defer parsing statements until the 2nd pass
 // so that all types are parsed.
 // t.x;
 
-class T1: extension {
-var lhgh : int;
-  var eljl:int;
-}
-
-class T1: extension {
-var ffgdgh : int;
-  var hdssrt:int;
-}
-
-
+//var v1 : int = t.x;
+var v2 : int = t.y;

@@ -64,6 +64,11 @@ simple_lookup(Context& cxt, Name const& name)
 
   // TODO: List candidates.
   if (result.size() > 1) {
+    if(is<Extension_decl>(&result.front())){
+      error(cxt, "lookup of '{}' results in only extension(s)", name);
+      throw Lookup_error("no main class is defined");
+    }
+
     error(cxt, "lookup of '{}' is ambiguous", name);
     throw Lookup_error("ambiguous lookup");
   }
