@@ -49,9 +49,10 @@ Parser::finish_translation_unit(Decl& d, Stmt_list&& ss)
   declarations(tu); // Assign types to declarations
 
   // TODO: Transform abbreviated templates into templates.
-
   overloads(tu);    // Analyze overloaded/reopened declarations
+
   classes(tu);      // Complete class definitions
+
   expressions(tu);  // Update expressions
 
   return tu;

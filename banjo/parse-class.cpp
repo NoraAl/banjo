@@ -25,6 +25,7 @@ namespace banjo
 Decl&
 Parser::class_declaration()
 {
+
   Match_token_pred end_kind(*this, lbrace_tok);
 
   require(class_tok);
@@ -34,7 +35,7 @@ Parser::class_declaration()
   Type* kind;
   if (match_if(colon_tok)) {
     if (match_if(extension_tok))
-      return extension_declaration(name, *kind);
+      return extension_declaration(name, &cxt.get_type_type());
     if (next_token_is(lbrace_tok))
       kind = &cxt.get_type_type();
     else
@@ -58,10 +59,10 @@ Parser::class_declaration()
 //      'class' identifier [':' extension]  class-body
 
 Decl&
-Parser::extension_declaration(Name& name, Type& kind)
+Parser::extension_declaration(Name& name, Type* kind)
 {
   // Point of declaration.
-  Decl& decl = start_extension_declaration(name, kind);
+  Decl& decl = start_extension_declaration(name, *kind);
   Enter_scope scope(cxt, cxt.saved_scope(decl));
 
   // Match the class body.

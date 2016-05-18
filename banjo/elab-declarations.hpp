@@ -5,6 +5,7 @@
 #define BANJO_ELAB_DECLARATIONS_HPP
 
 #include "language.hpp"
+//#include "ast.hpp"
 
 
 namespace banjo
@@ -27,6 +28,7 @@ struct Elaborate_declarations
 
   void statement(Stmt&);
   void statement_seq(Stmt_list&);
+  void clear_extensions(Stmt_list&);
   void compound_statement(Compound_stmt&);
   void declaration_statement(Declaration_stmt&);
 
@@ -45,6 +47,21 @@ struct Elaborate_declarations
 
   Parser&  parser;
   Context& cxt;
+};
+
+struct Elaborate_partials
+{
+  Elaborate_partials(Context&,Scope&, Class_decl&);
+  ~Elaborate_partials();
+  void collect(Scope&);
+  void add_to_main_class(Decl&, Scope&);
+  bool is_extension(Decl&);
+
+  Scope* current_scope;
+  Class_decl*   decl;
+  Overload_set* ovl;
+  Context& cxt;
+  bool appropriate_declaration;
 };
 
 

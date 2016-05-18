@@ -26,6 +26,10 @@ make_type(Context& cxt, Simple_id& id)
     return cxt.get_coroutine_type(decl);
   }
   if (!is<Class_decl>(d)) {
+//    if(is<Extension_decl>(d)){
+//      Extension_decl& decl = cast<Extension_decl>(d);
+//      return cxt.get_class_type(decl);
+//    }
     error(cxt, "'{}' does not name a type", d);
     throw Type_error("not a type");
   }

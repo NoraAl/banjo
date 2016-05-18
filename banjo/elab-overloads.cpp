@@ -35,8 +35,8 @@ Elaborate_overloads::statement(Stmt& s)
   struct fn
   {
     Self& elab;
-    void operator()(Stmt& s)             { /* Do nothing. */ }
-    void operator()(Compound_stmt& s)    { elab.compound_statement(s); }
+    void operator()(Stmt& s)             {/* Do nothing. */ }
+    void operator()(Compound_stmt& s)    {elab.compound_statement(s); }
     void operator()(Declaration_stmt& s) { elab.declaration_statement(s); }
   };
   apply(s, fn{*this});
@@ -109,6 +109,7 @@ Elaborate_overloads::declaration(Decl& decl)
   {
     Self& elab;
     void operator()(Decl& d)          { /* Do nothing. */ }
+    void operator()(Extension_decl& d)          { lingo_unhandled(d); }
     void operator()(Function_decl& d) { elab.function_declaration(d); }
     void operator()(Class_decl& d)    { elab.class_declaration(d); }
   };

@@ -116,6 +116,9 @@ struct List_iterator
 
   bool operator==(List_iterator i) const { return iter == i.iter; }
   bool operator!=(List_iterator i) const { return iter != i.iter; }
+  List_iterator operator=(const List_iterator &i) {
+    iter = i.iter;
+    return *this; }
 
   Iter iter;
 };
@@ -193,10 +196,11 @@ struct List : Term, std::vector<T*>
   iterator begin() { return base().begin(); }
   iterator end()   { return base().end(); }
 
+  iterator remove_itr(const_iterator pos)   { return base().erase(pos.iter);}
+
   const_iterator begin() const { return base().begin(); }
   const_iterator end() const   { return base().end(); }
 };
-
 
 // Insert a range of iterators at the end of the list.
 template<typename T>

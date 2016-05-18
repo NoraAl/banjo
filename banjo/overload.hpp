@@ -34,6 +34,7 @@ struct Overload_set : Decl_list
   // Inserts a new declaration into the overload set. The declaration
   // shall be overloadable with all previous elements of the set.
   void insert(Decl& d) { push_back(d); }
+  iterator erase_decl(const_iterator d) { return remove_itr(d); }
 };
 
 

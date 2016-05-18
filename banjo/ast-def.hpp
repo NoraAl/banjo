@@ -147,6 +147,8 @@ struct Class_def : Def
   // Returns the list of member statements.
   Stmt_list const& statements() const { return stmts_; }
   Stmt_list&       statements()       { return stmts_; }
+  void add_statements(Stmt_list& another_list) { stmts_.append(another_list.begin(), another_list.end());
+  }
 
   // Returns the list of base classes.
   Decl_list const& base_classes() const { return bases_; }

@@ -152,7 +152,7 @@ struct Parser
 
   // Classes and extensions
   Decl& class_declaration();
-  Decl& extension_declaration(Name&, Type&);
+  Decl& extension_declaration(Name&, Type*);
   Def& class_body();
   Stmt_list member_statement_seq();
   Stmt& member_statement();

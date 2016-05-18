@@ -26,8 +26,33 @@ Elaborate_declarations::translation_unit(Translation_unit& tu)
 {
   Enter_scope scope(cxt, tu);
   statement_seq(tu.statements());
+  clear_extensions(tu.statements());
 }
 
+//Remove all extension statements
+void
+Elaborate_declarations::clear_extensions(Stmt_list& ss)
+{
+  struct is_extension_stmt
+  {
+    bool operator()(Extension_decl& d) { return true;}
+    bool operator()(Decl&d){ return false;}
+  };
+
+  struct fn
+  {
+    bool operator()(Stmt& s)             { return false;}
+    bool operator()(Compound_stmt& s)    { return false; }
+    bool operator()(Declaration_stmt& s) { return apply(s.declaration(), is_extension_stmt{}); }
+  };
+  for (auto iter = ss.begin(); iter != ss.end();){
+
+    if(apply(*iter, fn{}))
+      iter = ss.remove_itr(iter);
+    else
+      ++iter;
+  }
+}
 
 void
 Elaborate_declarations::statement(Stmt& s)
@@ -172,6 +197,7 @@ Elaborate_declarations::class_declaration(Class_decl& d)
 
   // search for declarations of the appropriate extensions in the current scope
   // current scope: nameMap: append decls definitions along with this one
+  Elaborate_partials elaborate(cxt,parser.current_scope(), d);
 
   Enter_scope scope(cxt, d);
   apply(d.definition(), fn{*this});
@@ -209,5 +235,65 @@ Elaborate_declarations::type(Type& t)
 }
 
 
+
+// -------------------------------------------------------------------------- //
+// Elaborate Extensions
+
+// Check overload set for every class declaration and collect related extensions
+Elaborate_partials::Elaborate_partials(Context& c, Scope& s, Class_decl& d)
+        : cxt(c), current_scope(&s), decl(&d)
+{
+  if(ovl = current_scope->lookup(decl->name())){
+    if(ovl->size()>1)
+      appropriate_declaration = true;
+    collect(cxt.saved_scope(d));
+  }
+
+}
+
+void
+Elaborate_partials::collect(Scope& class_scope) {
+  for (auto iter = ovl->begin(); iter != ovl->end(); ++iter)
+    add_to_main_class(*iter, class_scope);
+}
+
+void
+Elaborate_partials::add_to_main_class(Decl& d, Scope& class_scope) {
+  if(!is<Extension_decl>(&d))//maybe show an error?
+    return;
+
+  Scope* temp = &cxt.saved_scope(d);
+  class_scope.names.insert(temp->names.begin(),temp->names.end());
+
+  struct fn
+  {
+    Stmt_list& operator()(Def& d)       { lingo_unhandled(d); }
+    Stmt_list& operator()(Class_def& d) { return d.statements(); }
+  };
+
+  Extension_decl* extension_decl = as<Extension_decl>(&d);
+  Class_def* def = as<Class_def>(&decl->definition());
+  Stmt_list& lis = apply(extension_decl->definition(), fn{});
+  def->add_statements(lis);
+}
+
+
+Elaborate_partials::~Elaborate_partials()
+{
+  if (appropriate_declaration)
+    for (auto iter = ovl->begin(); iter != ovl->end();)
+      if(is_extension(*iter))
+        iter = ovl->erase_decl(iter);
+      else
+        ++iter;
+}
+
+
+bool
+Elaborate_partials::is_extension(Decl& d) {
+  if(!is<Extension_decl>(&d))
+    return false;
+  return true;
+}
 } // namespace banjo
 
