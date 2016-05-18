@@ -101,10 +101,10 @@ Elaborate_overloads::declaration(Decl& decl)
   auto iter = std::find_if(ovl.begin(), ovl.end(), [&decl](Decl& d) {
     return &decl == &d;
   });
-//  if(is<Class_decl>(decl)||is<Extension_decl>(decl))
-//    return;
+
   lingo_assert(iter != ovl.end());//show extension message
   check_declarations(cxt, decl, ++iter, ovl.end());
+
 
   // Otherwise, potentially recurse.
   struct fn

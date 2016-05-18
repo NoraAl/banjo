@@ -96,7 +96,6 @@ check_declarations(Context& cxt, Decl const& d1, Decl const& d2)
     void operator()(Function_decl const& d1) { return check_declarations(cxt, d1, cast_as(d1, d2)); }
     void operator()(Type_decl const& d1)     { return check_declarations(cxt, d1, cast_as(d1, d2)); }
   };
-
   if (typeid(d1) != typeid(d2)) {
     // TODO: Get the source location right.
     error(cxt, "declaration changes the meaning of '{}'", d1.name());

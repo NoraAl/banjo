@@ -62,6 +62,7 @@ struct Elaborate_partials
   Overload_set* ovl;
   Context& cxt;
   bool appropriate_declaration;
+  Class_def* def;
 };
 
 

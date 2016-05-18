@@ -244,9 +244,10 @@ Elaborate_partials::Elaborate_partials(Context& c, Scope& s, Class_decl& d)
         : cxt(c), current_scope(&s), decl(&d)
 {
   if(ovl = current_scope->lookup(decl->name())){
-    if(ovl->size()>1)
+    if(ovl->size()>1){
+      def = as<Class_def>(&decl->definition());
       appropriate_declaration = true;
-    collect(cxt.saved_scope(d));
+      collect(cxt.saved_scope(d));}
   }
 
 }
@@ -263,7 +264,19 @@ Elaborate_partials::add_to_main_class(Decl& d, Scope& class_scope) {
     return;
 
   Scope* temp = &cxt.saved_scope(d);
-  class_scope.names.insert(temp->names.begin(),temp->names.end());
+
+  // elaborate extensions recursively for every definition,
+  // or to be handled later on?
+  std::for_each(temp->names.begin(), temp->names.end(), [&class_scope](auto iter){
+    auto i = class_scope.names.find(iter.first);
+
+    if (i != class_scope.names.end()){
+      Overload_set* tovl = &iter.second;
+      i->second.append(tovl->begin(),tovl->end());
+    } else{
+      class_scope.names.insert(iter);
+    }
+  });
 
   struct fn
   {
@@ -272,17 +285,16 @@ Elaborate_partials::add_to_main_class(Decl& d, Scope& class_scope) {
   };
 
   Extension_decl* extension_decl = as<Extension_decl>(&d);
-  Class_def* def = as<Class_def>(&decl->definition());
   Stmt_list& lis = apply(extension_decl->definition(), fn{});
   def->add_statements(lis);
 }
 
-
+//removes all declarations of extensions in the current class scope
 Elaborate_partials::~Elaborate_partials()
 {
   if (appropriate_declaration)
     for (auto iter = ovl->begin(); iter != ovl->end();)
-      if(is_extension(*iter))
+      if (is_extension(*iter))
         iter = ovl->erase_decl(iter);
       else
         ++iter;
